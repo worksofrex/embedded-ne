@@ -36,7 +36,7 @@ customer_uid = generate_uid()
 
 # Wait for 2 seconds to be able to switch to the Webcam Window.
 print("Please get your face ready!")
-time.sleep(1)
+time.sleep(2)
 
 # Initialize the camera
 camera = cv2.VideoCapture(0)
@@ -49,6 +49,8 @@ interval = 500  # Capture an image every 500 milliseconds
 current_time = start_time
 image_count = 0  # Total number of images captured
 
+
+faces = []
 # Start looping
 while True:
     ret, image = camera.read()
@@ -110,7 +112,7 @@ if len(faces) > 0:
                 # Generate filename without spaces
                 image_name = f"data.{customer_uid}_{image_count+1}.jpg"
                 image_path = os.path.join('dataset', image_name)
-                
+
                 # Save the captured image
                 cv2.imwrite(image_path, gray[y:y + h, x:x + w])
                 current_time = time.time()
@@ -123,7 +125,7 @@ if len(faces) > 0:
         cv2.imshow("Dataset Generating...", image)
 
         # To stop taking video, press 'q' key or if image count reaches 100
-        if cv2.waitKey(1) & 0xFF == ord('q') or image_count >= 50:
+        if cv2.waitKey(1) & 0xFF == ord('q') or image_count >= 100:
             try:
                 c.execute("INSERT INTO customers (customer_uid, customer_name) VALUES (?, ?)", (customer_uid, customer_name))
                 conn.commit()

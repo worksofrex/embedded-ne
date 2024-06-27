@@ -89,12 +89,15 @@ while True:
             faceRectangleColor = unknownFaceRectangleColor
             
             # If the face is recognized within the confidence range
-            if 60 < confidence < 85:
+            print(confidence, customer_uid)
+            if int(confidence) > 40 and int(confidence)  < 100 :
+                print("i   am  here")
                 try:
                     conn = sqlite3.connect('customer_faces_data.db')
                     c = conn.cursor()
                     c.execute("SELECT customer_name FROM customers WHERE customer_uid = ?", (customer_uid,))
                     row = c.fetchone()
+                    print(row)
                 except sqlite3.Error as e:
                     print("SQLite error:", e)
                     row = None
@@ -118,8 +121,8 @@ while True:
                         current_customer_uid = customer_uid
                         print(f"Face recognized: {customer_name}")
                         # Send recognition success message over Bluetooth
-                        if bluetooth:
-                            bluetooth.write(b'Face Recognized Successfully\r\n')
+                        # if bluetooth:
+                        #     bluetooth.write(b'Face Recognized Successfully\r\n')
                         break
             
             # Create rectangle around the face
@@ -213,8 +216,8 @@ while True:
                         conn.close()
                 
                 # Send message via Bluetooth on successful shopping
-                if bluetooth:
-                    bluetooth.write(b'Successful Shopping\r\n')  # Adjust message as needed
+                # if bluetooth:
+                #     bluetooth.write(b'Successful Shopping\r\n')  # Adjust message as needed
                 
                 recognition_count = {}  # Reset recognition count
                 face_recognized = False  # Resume face detection
